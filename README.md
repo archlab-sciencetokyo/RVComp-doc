@@ -7,3 +7,7 @@ To build the documentation, please use the following commands (NOTE: this requir
 $ uv sync
 $ uv run make html
 ```
+
+Documentation are available at: https://archlab-sciencetokyo.github.io/RVComp-doc/
+
+[![Deploy Sphinx documentation to GitHub Pages](https://github.com/archlab-sciencetokyo/RVComp-doc/actions/workflows/jekyll-gh-pages.yml/badge.svg)](https://archlab-sciencetokyo.github.io/RVComp-doc/)
