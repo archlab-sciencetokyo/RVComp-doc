@@ -10,36 +10,36 @@ RVComp Document Top
     :maxdepth: 1
     :caption: Getting Started
 
-    src/intro/index.md
-    src/intro/quickstart.md
-    src/intro/install.md
-    src/intro/makesetup.md
-    src/intro/make.md
-    src/intro/serial.md
-    src/intro/dir.md
-    src/intro/config.md
-    src/intro/sim.md
-    src/intro/impl.md
-    src/intro/build.md
-    src/intro/mmio.md
+    intro/index.md
+    intro/quickstart.md
+    intro/install.md
+    intro/makesetup.md
+    intro/make.md
+    intro/serial.md
+    intro/dir.md
+    intro/config.md
+    intro/sim.md
+    intro/impl.md
+    intro/build.md
+    intro/mmio.md
 
 .. toctree::
     :maxdepth: 1
     :caption: Architecture
 
-    src/arch/index.md
-    src/arch/rvcpu.md
-    src/arch/mmu.md
-    src/arch/l2.md
-    src/arch/interconnect.md
-    src/arch/uart.md
-    src/arch/dram.md
-    src/arch/clint.md
-    src/arch/plic.md
-    src/arch/bootrom
+    arch/index.md
+    arch/rvcpu.md
+    arch/mmu.md
+    arch/l2.md
+    arch/interconnect.md
+    arch/uart.md
+    arch/dram.md
+    arch/clint.md
+    arch/plic.md
+    arch/bootrom
 
 .. toctree::
     :maxdepth: 1
     :caption: Copyright
 
-    src/copyright/index.md
+    copyright/index.md
