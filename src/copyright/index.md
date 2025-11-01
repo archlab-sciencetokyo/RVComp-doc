@@ -1,4 +1,4 @@
-# Copyright and License
+# Project Information and Copyright
 
 ## Project Information
 
@@ -14,13 +14,13 @@ The copyright of this project belongs to the [Architecture Lab (Kise Laboratory)
 
 
 ## Contributors
-Contributors to this project are as follows:
-[shmrnrk](https://github.com/shmknrk) \\
-[yuyu5510](https://github.com/yuyu5510) \\
-[Kise K.](https://github.com/kisek) \\
+Contributors to this project are as follows:\
+[shmrnrk](https://github.com/shmknrk) \
+[yuyu5510](https://github.com/yuyu5510) \
+[Kise K.](https://github.com/kisek) 
 
-We would like to thank [shmknrk](https://github.com/shmknrk) for their significant contributions to this repository.
+We would like to appreciate the contributions from [shmknrk](https://github.com/shmknrk) for his significant contributions to this repository.
 
 ## Change History
 
-- **2025-09-30**: Initial release
+- **2025-10-31**: Initial release
