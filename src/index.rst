@@ -18,9 +18,8 @@ RVComp Document Top
     intro/serial.md
     intro/dir.md
     intro/config.md
-    intro/sim.md
-    intro/impl.md
     intro/build.md
+    intro/ipguisetup.md
     intro/mmio.md
 
 .. toctree::
@@ -36,7 +35,7 @@ RVComp Document Top
     arch/dram.md
     arch/clint.md
     arch/plic.md
-    arch/bootrom
+    arch/bootrom.md
 
 .. toctree::
     :maxdepth: 1
