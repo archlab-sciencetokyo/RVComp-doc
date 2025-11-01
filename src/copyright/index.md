@@ -1,10 +1,10 @@
 # Project Information and Copyright
 
 ## Project Information
-
-**Project Name**: RVComp
-**Version**: 1.0
-**Last Updated**: 2025
+This project started June, 2024.
+**Project Name**: RVComp\
+**Version**: 1.0.0\
+**Last Updated**: 2025/10/31
 
 ## Copyright
 
