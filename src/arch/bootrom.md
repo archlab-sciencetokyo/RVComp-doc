@@ -8,7 +8,7 @@ bootrom is a ROM that stores the first-stage bootloader and device tree executed
 
 Hardware
 ```
-bootrom (bootrom/bootrom.v)                # Boot ROM (no submodules)
+bootrom (bootrom/bootrom.v)                # ROM for boot (no submodules)
 ```
 
 
@@ -44,7 +44,7 @@ bootrom stores in 128-bit units and is read with 128-bit data width. An intercon
 
 ## Software Configuration
 
-Boot ROM software is stored in the `rvcom/bootrom/src/` directory:
+Bootrom software is stored in the `rvcom/bootrom/src/` directory:
 
 ### bootrom.S
 Executes startup routine and calls the first-stage bootloader.

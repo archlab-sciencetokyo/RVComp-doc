@@ -4,11 +4,21 @@
 
 RVCom is a System-on-Chip (SoC) that implements the RISC-V ISA (RV32IMAZicsr_Zifencei). This SoC is a fully functional system integrating a CPU, Memory Management Unit (MMU), cache hierarchy, peripherals, and a DRAM controller.
 
-## System Configuration
-
-<!-- ### SoC Block Diagram　TODO: Figure? -->
-
-
+## Architecture Diagram
+```{mermaid}
+%%{init: {'flowchart': {'curve': 'stepAfter'}}}%%
+flowchart TD
+    CPU["RVCpu (RV32IMASU_Zicsr_Zicntr_Zifencei)"] --> MMU["MMU (Sv32) <br> (has ITLB/DTLB/PTW/L1 I/D Cache)"]
+    MMU --> L2["L2 Cache <br> (Large unified cache)"]
+    L2 --> AXI["AXI Based Interconnect (Address Decode)"]
+    AXI --- Bus[" "]
+    style Bus width:0px,height:0px,fill:none,stroke:none
+    Bus --> bootrom
+    Bus --> CLINT
+    Bus --> PLIC
+    Bus --> UART
+    Bus --> DRAM[DRAM Controller]
+```
 
 ### Module Hierarchy
 
@@ -81,8 +91,8 @@ Platform-Level Interrupt Controller. Arbitrates external interrupts based on pri
 ##### [UART](uart.md)
 RS-232 serial communication controller. Equipped with transmit/receive FIFOs and configurable baud rate. Used for system debugging and program loading during boot.
 
-##### [Boot ROM](bootrom.md)
-8KB boot ROM. Stores initialization code and bootloader executed after reset. Supports program loading via UART or execution from DRAM.
+##### [bootrom](bootrom.md)
+8KB bootrom. Stores initialization code and bootloader executed after reset. Supports program loading via UART or execution from DRAM.
 
 ##### [DRAM Controller](dram.md)
 DDR2/DDR3 controller using Xilinx MIG (Memory Interface Generator). Converts AXI protocol to DRAM commands and manages main memory access.
@@ -122,4 +132,4 @@ Project configuration is managed through the following files:
 - [DRAM Controller](dram.md)
 - [CLINT](clint.md)
 - [PLIC](plic.md)
-- [Boot ROM](bootrom.md)
+- [bootrom](bootrom.md)

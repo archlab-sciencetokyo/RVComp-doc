@@ -49,18 +49,18 @@ Instruction    Instruction     Operand       Execution        Write
   Fetch          Decode         Fetch          Stage          Back
 ```
 
-#### 1. IF (Instruction Fetch) Stage
+### 1. IF (Instruction Fetch) Stage
 - Instruction address generation
 - Instruction fetch
 - Branch prediction
 - L0 instruction cache access
 
-#### 2. ID (Instruction Decode) Stage
+### 2. ID (Instruction Decode) Stage
 - Instruction decode
 - Immediate generation
 - Exception detection (page fault, access fault during instruction fetch)
 
-#### 3. OF (Operand Fetch) Stage
+### 3. OF (Operand Fetch) Stage
 - Register read
 - CSR read
 - Data forwarding determination
@@ -68,14 +68,14 @@ Instruction    Instruction     Operand       Execution        Write
 - Exception detection (illegal instruction exception)
 
 
-#### 4. EX (Execution) Stage
+### 4. EX (Execution) Stage
 - Arithmetic logic operations
 - Branch resolution
 - Memory address calculation, memory access
 - Multiplication/division
 - Exception detection (page fault, access fault, misalignment detection during data access)
 
-#### 5. WB (Write Back) Stage
+### 5. WB (Write Back) Stage
 - Write back to register file
 - Write back to CSR
 - Exception/interrupt handling

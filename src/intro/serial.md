@@ -51,7 +51,7 @@ $ make remoteload
 - The bitstream was not loaded onto the FPGA.
 - Serial port settings (port, encoding, baud rate, etc.) are incorrect.
 - Bad physical connection. Please try reseating or replacing the cable, or using another USB port.
-- The bitstream was generated without rebuilding the boot ROM image. Please run `make bootrom` first to create `bootrom.128.hex`, then regenerate the bitstream.
+- The bitstream was generated without rebuilding the bootrom image. Please run `make bootrom` first to create `bootrom.128.hex`, then regenerate the bitstream.
 - Communication still fails even though settings look correct:
   - Very high baud rates can fail due to device or terminal limitations.
   - RVComp matches the baud rate by waiting `floor(Clock Frequency (Hz) / Baudrate (bps))` cycles. If the truncation error is large, communication can fail. Please adjust the clock frequency or baud rate to reduce the error.
@@ -60,9 +60,9 @@ $ make remoteload
 
 - If the console output becomes garbled, the serial link is likely the problem. Please follow the same checks as above.
 - You typed something in the serial console after launching the program. RVComp counts the bytes arriving over UART and writes them to DRAM before running the second-stage bootloader. Extra input corrupts the count. Please reload the bitstream and resend the Linux image.
-- The bitstream was generated without a proper boot ROM image:
-  - The boot ROM needs the byte length of the incoming binary. Please verify the `BIN_SIZE` argument passed to `make bootrom` in `config.mk` (it should match the size of `images/fw_payload.bin`) and regenerate the bitstream.
-  - The boot ROM must be 8 KiB or smaller. If it exceeds 8 KiB, please modify the program or increase `ROM_SIZE` in the boot ROM module.
+- The bitstream was generated without a proper bootrom image:
+  - The bootrom needs the byte length of the incoming binary. Please verify the `BIN_SIZE` argument passed to `make bootrom` in `config.mk` (it should match the size of `images/fw_payload.bin`) and regenerate the bitstream.
+  - The bootrom must be 8 KiB or smaller. If it exceeds 8 KiB, please modify the program or increase `ROM_SIZE` in the bootrom module.
 - The console stops at the OpenSBI banner. The transferred binary may not include a Linux image. Refer to [Building Linux](build.md).
 
 (communication-port-check)=

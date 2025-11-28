@@ -10,7 +10,7 @@ This section explains the main `make` targets and options in the RVComp project.
 $ make bootrom
 ```
 
-Builds the program and device tree stored in the boot ROM. If you launch Vivado in the GUI, you must build the boot ROM image manually.
+Builds the program and device tree stored in the bootrom. If you launch Vivado in the GUI, you must build the bootrom image manually.
 
 ### bit
 
@@ -20,7 +20,7 @@ $ make bit
 
 Generates the FPGA bitstream. The recipe performs the following steps:
 
-1. Clean and rebuild the boot ROM
+1. Clean and rebuild the bootrom
 2. Run Vivado for logic synthesis, place-and-route, and bitstream generation
 
 ### rebit

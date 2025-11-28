@@ -59,3 +59,7 @@ $ udevadm info /dev/ttyUSB1 | grep ID_VENDOR=
 ```
 
 Please record the `/dev/ttyUSB*` path assigned to the FPGA board.
+
+
+## Prebuilt Bitstream Parameters
+`nexys4ddr.bit` and `arty_a7.bit` are configured with a clock frequency increased by 10 MHz from the default.

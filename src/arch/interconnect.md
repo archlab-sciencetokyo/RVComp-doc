@@ -13,7 +13,7 @@ The differences from AXI4-Lite are the following two points:
 
 - **Protocol**: AXI4-Lite compliant
 - **Master**: L2 Cache (via CPU/MMU)
-- **Slaves**: Boot ROM, CLINT, PLIC, UART, DRAM
+- **Slaves**: bootrom, CLINT, PLIC, UART, DRAM
 - **Arbitration**: Single master, multiple slaves
 - **Address Decode**: Automatic routing based on memory map
 
@@ -31,17 +31,17 @@ Sends and receives data with appropriate modules based on addresses.
 
 ## Architecture
 
-```
-         L2 Cache
-             |
-    +--------v---------+
-    | AXI Interconnect |
-    |  (Address Decode)|
-    +--------+---------+
-             |
-    +--------+--------+--------+--------+--------+
-    |        |        |        |        |        |
-  BootROM  CLINT    PLIC     UART     DRAM
+```{mermaid}
+%%{init: {'flowchart': {'curve': 'stepAfter'}}}%%
+flowchart TD
+    L2[L2 Cache] --> AXI["AXI Based Interconnect (Address Decode)"]
+    AXI --- Bus[" "]
+    style Bus width:0px,height:0px,fill:none,stroke:none
+    Bus --> bootrom
+    Bus --> CLINT
+    Bus --> PLIC
+    Bus --> UART
+    Bus --> DRAM[DRAM Controller]
 ```
 
 ## Protocol

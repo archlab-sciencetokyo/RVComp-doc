@@ -21,13 +21,13 @@ MIG (Memory Interface Generator) is an IP core provided by AMD for controlling D
    - Data Width: 16
 8. Click Next.
 9. Configure the following items and click Next.
-　　- Input Clock Period: 6000 ps (166.667 MHz)
-　　- RTT (nominal) - ODT: 50ohms
+   - Input Clock Period: 6000 ps (166.667 MHz)
+   - RTT (nominal) - ODT: 50ohms
 10. Configure the following items and click Next.
-　　- System Clock: No Buffer
-　　- Reference Clock: No Buffer
-　　- System Reset Polarity: ACTIVE HIGH
-　　- Internal Vref: Checked
+    - System Clock: No Buffer
+    - Reference Clock: No Buffer
+    - System Reset Polarity: ACTIVE HIGH
+    - Internal Vref: Checked
 11. Click Next.
 12. Configure the following items and click Next.
     - Fixed Pin Out: Checked
@@ -55,14 +55,14 @@ MIG (Memory Interface Generator) is an IP core provided by AMD for controlling D
    - Data Width: 16
 8. Click Next.
 9. Configure the following items and click Next.
-　　- Input Clock Period: 6000 ps (166.667 MHz)
-　　- Output Driver Impedance Control: RZQ/6
-　　- RTT (nominal) - On Die Termination(ODT): RZQ/6
+   - Input Clock Period: 6000 ps (166.667 MHz)
+   - Output Driver Impedance Control: RZQ/6
+   - RTT (nominal) - On Die Termination(ODT): RZQ/6
 10. Configure the following items and click Next.
-　　- System Clock: No Buffer
-　　- Reference Clock: No Buffer
-　　- System Reset Polarity: ACTIVE HIGH
-　　- Internal Vref: Checked
+    - System Clock: No Buffer
+    - Reference Clock: No Buffer
+    - System Reset Polarity: ACTIVE HIGH
+    - Internal Vref: Checked
 11. Click Next.
 12. Configure the following items and click Next.
     - Fixed Pin Out: Checked
@@ -76,3 +76,23 @@ MIG (Memory Interface Generator) is an IP core provided by AMD for controlling D
 
 
 ## Clocking Wizard
+
+### clk_wiz_1 (for DRAM Controller)
+1. Search for "Clocking Wizard" from "IP Catalog" and double-click to add the IP.
+2. The "Customize IP" window opens. Configure the following settings.
+3. Click "Clocking Options".
+4. Check "Minimize Output Jitter".
+5. Click "Output Clocks".
+6. Congiure the following and click OK.
+    - check clk_out2
+    - Request of clk_out1's Output Freq (MHz): 166.6666 
+    - Request of clk_out1's Output Freq (MHz): 200.0000
+
+### clk_wiz_2 (for SoC)
+1. Search for "Clocking Wizard" from "IP Catalog" and double-click to add the IP.
+2. The "Customize IP" window opens. Configure the following settings.
+3. Click "Clocking Options".
+4. Check "Minimize Output Jitter".
+5. Click "Output Clocks".
+6. Congiure the following and click OK.
+    - Request of clk_out1's Output Freq (MHz): (SoC's clock freqency, default=160)

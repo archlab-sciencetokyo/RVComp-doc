@@ -13,7 +13,7 @@ author = 'Yuki Yagi'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["myst_parser", "sphinx.ext.githubpages"]
+extensions = ["myst_parser", "sphinx.ext.githubpages", "sphinxcontrib.mermaid"]
 
 # MyST Parser configuration
 myst_enable_extensions = [
