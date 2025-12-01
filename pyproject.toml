@@ -1,6 +1,6 @@
 [project]
 name = "rvcomp-doc"
-version = "1.0.0"
+version = "1.0.1"
 description = "RVcomp Documentation"
 readme = "README.md"
 requires-python = ">=3.10"
