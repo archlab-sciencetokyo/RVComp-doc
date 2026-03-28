@@ -12,6 +12,7 @@ RVComp Document Top
 
     intro/index.md
     intro/quickstart.md
+    intro/demo.md
     intro/install.md
     intro/makesetup.md
     intro/make.md
@@ -36,6 +37,17 @@ RVComp Document Top
     arch/clint.md
     arch/plic.md
     arch/bootrom.md
+    arch/ethernet.md
+    arch/sdcram.md
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Software
+
+    software/index.md
+    software/buildroot.md
+    software/boot-flow.md
+    software/drivers.md
 
 .. toctree::
     :maxdepth: 1

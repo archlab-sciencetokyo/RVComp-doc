@@ -7,17 +7,35 @@ This page explains how to operate RVComp after generating the bitstream and how 
 
 ## Serial communication with the FPGA
 
-For a locally connected FPGA, after completing the [Makefile setup](makesetup.md) (Vivado path and `COM_PORT`), please run `$ make term` to start the serial program. Please open another terminal and run `$ make config` to load the bitstream and send the Linux image automatically.
-
-To operate the tool manually:
+### UART boot
 
 1. Please identify the serial port connected to the FPGA. See [Communication Port Check](#communication-port-check).
 2. Please edit `config.mk` and set `COM_PORT` to the port name you found.
 3. Please run `$ make term` to launch the serial communication program.
 4. Please load the bitstream onto the FPGA (see [Load to FPGA](#load-to-fpga)). If the console does not display anything, refer to [Troubleshooting](#troubleshooting).
 5. The terminal shows `[     bootrom] Hello, world!`.
-6. Please open another terminal and run `cat image/fw_payload.bin > <port>` to send the Linux image.
+6. When using `make term`, the program detects `!\n` from the bootrom and automatically begins sending `image/fw_payload.bin`.
 7. Once the transfer completes, Linux boots and the login prompt appears. If it does not boot correctly, please refer to [Troubleshooting](#troubleshooting).
+8. To use Ethernet, configure the network interface:
+   ```sh
+   $ ip addr add <IP_ADDRESS>/<PREFIX_LEN> dev eth0
+   $ ip link set eth0 up
+   ```
+9. Please press `Ctrl+C`, then type `:q` to close the serial program.
+
+### MMC boot
+
+1. Please identify the serial port connected to the FPGA. See [Communication Port Check](#communication-port-check).
+2. Please edit `config.mk` and set `COM_PORT` to the port name you found.
+3. Insert the microSD card written with payload and root filesystem into the board's microSD slot (see [Quick Start](quickstart.md) for how to prepare the card).
+4. Please run `$ make termnb` to open the serial console without file transfer.
+5. Please load the bitstream onto the FPGA (see [Load to FPGA](#load-to-fpga)).
+6. The bootrom copies the Linux image from the microSD card into DRAM and boots Linux. Once the login prompt appears, log in as `root` (no password).
+7. To use Ethernet, configure the network interface:
+   ```sh
+   $ ip addr add <IP_ADDRESS>/<PREFIX_LEN> dev eth0
+   $ ip link set eth0 up
+   ```
 8. Please press `Ctrl+C`, then type `:q` to close the serial program.
 
 (load-to-fpga)=
@@ -55,6 +73,10 @@ $ make remoteload
 - Communication still fails even though settings look correct:
   - Very high baud rates can fail due to device or terminal limitations.
   - RVComp matches the baud rate by waiting `floor(Clock Frequency (Hz) / Baudrate (bps))` cycles. If the truncation error is large, communication can fail. Please adjust the clock frequency or baud rate to reduce the error.
+
+### `[bootrom] Hello, world!` appears when opening the console on Arty A7
+
+When using `make termnb` on Arty A7, if `[bootrom] Hello, world!` is displayed immediately after the console opens, the board is being reset by the serial connection. This happens when the UART DTR pin is jumpered to the board's reset line. Please remove the jumper connecting DTR and RST.
 
 ### Linux image was sent but Linux does not boot
 

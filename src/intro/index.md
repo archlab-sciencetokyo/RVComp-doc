@@ -4,13 +4,25 @@
 
 RVComp is a RISC-V SoC (System on Chip) with a five-stage pipeline. It supports the RV32IMASU_Zicntr_Zicsr_Zifencei instruction set, including privileged modes and the Sv32 virtual memory system, so it can run Linux. The RVComp project began in June 2024 and offers the following characteristics:
 
-- **High operating frequency**: Achieves a maximum clock frequency of **170 MHz** on a Nexys A7-100T (XC7A100T-1CSG324C)
-- **HDL implementation**: About 7,757 lines of Verilog HDL (as of October 2025), with a from-scratch design except for the DRAM controller and clock generation
+- **High operating frequency**: Achieves a maximum clock frequency of **170 MHz** (Version 1.0.0.0) on a Nexys A7-100T (XC7A100T-1CSG324C)
+- **HDL implementation**: RVComp is described in Verilog HDL with a from-scratch design except for the DRAM controller and clock generation
 - **Permissive licensing**: All HDL components except IP are provided under the MIT license
+
+
+- **Ethernet support**: 100 Mbps Ethernet controller with RMII (Nexys 4 DDR) and MII (Arty A7) interfaces, including hardware MAC filtering and FCS computation
+- **microSD boot support**: microSD controller enabling Linux to boot and operate from a microSD card on the Nexys 4 DDR board
+- **Interactive configuration**: Various SoC parameters can be configured through a terminal-based GUI (`tools/setting.py`)
+- **Docker support**: Containerized build environment with simulation tools pre-installed (Vivado must be installed natively)
+
+
 
 ## LICENSE
 
-RVComp files we developed from scratch are distributed under the [MIT license](https://opensource.org/licenses/MIT), so the project source code can be freely used, modified, and redistributed. 
+
+
+RVComp files we developed from scratch are distributed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
 
 However, please note that the RVComp project uses multiple open-source components.
 The following components follow their respective licenses; see the LICENSE file for full details.
@@ -20,8 +32,14 @@ The following components follow their respective licenses; see the LICENSE file 
 - **prog/coremark**: [CoreMark](https://github.com/eembc/coremark) ([COREMARK® ACCEPTABLE USE AGREEMENT + Apache License 2.0](https://github.com/eembc/coremark?tab=License-1-ov-file))
 - **prog/embench**: [Embench-IoT](https://github.com/embench/embench-iot) ([GPL-3.0 License](https://github.com/embench/embench-iot?tab=GPL-3.0-1-ov-file))
 - **prog/riscv-tests**: [riscv-tests](https://github.com/riscv/riscv-tests) ([The Regents of the University of California (Regents)](https://github.com/riscv-software-src/riscv-tests?tab=License-1-ov-file))
+- **OpenSBI**: [OpenSBI customized for RVComp](https://github.com/archlab-sciencetokyo/opensbi.git) ([BSD-2-Clause License](https://github.com/archlab-sciencetokyo/opensbi?tab=License-1-ov-file))
 
-- **OpenSBI**: [OpenSBI for customized for RVComp](https://github.com/archlab-sciencetokyo/opensbi.git) ([BSD-2-Clause License](https://github.com/archlab-sciencetokyo/opensbi?tab=License-1-ov-file))
+
+- **buildroot**: Device drivers, configuration files, and patches to build Linux ([GPL-2.0 License](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)).
+- **RVComp-buildenv**: Build scripts that use Buildroot to produce Linux images ([GPL-2.0 License](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)). Prebuilt Linux images also include third-party software such as Linux and OpenSBI, so redistribution must follow the licenses of those components.
+- **tools/XilinxBoardStore**: [Xilinx Board Store](https://github.com/Xilinx/XilinxBoardStore) ([Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0))
+
+
 
 ### System overview
 
@@ -38,7 +56,7 @@ For the overall system structure, refer to [SoC Architecture](../arch/index.md).
   - Zicntr: counter access instructions
   - Zicsr: CSR access instructions
   - Zifencei: instruction-fetch fences
-- **Virtual memory**: Sv32 (two-level page tables with 4 KB pages)
+- **Virtual memory**: Sv32 (two-level page tables with 4 KB pages)
 
 ## Development environment
 
@@ -48,10 +66,16 @@ For the overall system structure, refer to [SoC Architecture](../arch/index.md).
 - **Simulator**: Verilator (v5.033)
 - **FPGA synthesis**: Vivado Edition 2024.1
 - **Supported boards**:
-  - Nexys 4 DDR 100T (DDR2, 128 MB)
-  - Arty A7 35T (DDR3, 256 MB)
+  - Nexys 4 DDR 100T (DDR2, 128 MB)
+  - Arty A7 35T (DDR3, 256 MB)
 
 We develop on Ubuntu 22.04 LTS, and this guide is primarily written for that environment. We have also confirmed operation on Windows 11 Education, but some tools do not provide Windows installers, so WSL2 is required in those cases. Commands in the Makefiles use Unix conventions, so WSL2 is recommended for Windows users. Some tools do not support Arm environments. If you plan to work on Arm hardware, consider using an x86_64 virtual machine.
+
+
+
+A Docker-based build environment is also provided. Running `./tools/setup.sh` sets up the container with all simulation tools pre-installed (Vivado must be installed natively). Docker is required; see the [Docker installation guide](https://docs.docker.com/get-docker/) if you do not have it. For details, see [Installation Guide](install.md).
+
+
 
 ## Verification status
 

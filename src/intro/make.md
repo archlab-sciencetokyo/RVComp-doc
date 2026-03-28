@@ -31,6 +31,18 @@ $ make rebit
 
 Regenerates the bitstream using the existing Vivado project. Skipping project recreation makes it faster than `make bit`.
 
+
+
+### reclockbit
+
+```bash
+$ make reclockbit
+```
+
+Reuses the existing Vivado project, updates the SoC clock settings through `reclock.tcl`, rebuilds the bootrom image, and regenerates the bitstream. Use this target when you changed only the clock frequency and want a faster turnaround than `make bit`.
+
+
+
 ### load
 
 ```bash
@@ -53,15 +65,41 @@ Loads the bitstream onto a remote FPGA over the network. The remote host must be
 $ make term
 ```
 
-Launches the serial communication program and opens a connection to the FPGA. When the program receives `!\n`, it sends the Linux image specified by the `linux_image` variable in the Makefile (default `./image/fw_payload.bin`) to the FPGA and boots Linux. The bootloader (`bootrom/src/bootloader.c`) first transmits `Hello World!\n`; the final two characters are used to detect that the FPGA has finished booting. To exit the serial console, please press `Ctrl+C` followed by `:q`.
+Used for UART boot. Launches the serial communication program and opens a serial console. When the bootrom outputs `!\n`, the program automatically transfers the Linux image specified by `linux_image` in `config.mk` (default `./image/fw_payload.bin`) and boots Linux. To exit, press `Ctrl+C` followed by `:q`. See [Serial Communication](serial.md) for details.
 
-### config
+### termnb
 
 ```bash
-$ make config
+$ make termnb
 ```
 
-Loads the bitstream onto the FPGA and transfers the Linux image (local FPGA only).
+Opens a serial console without transferring a Linux image. Use this target after Linux has been started via MMC boot, or after a UART boot has completed and you want to reconnect to the console. To exit, press `Ctrl+C` followed by `:q`. See [Serial Communication](serial.md) for details.
+
+
+
+### menuconfig
+
+```bash
+$ make menuconfig
+```
+
+Opens the curses-based configuration UI provided by `tools/setting.py`. The interface is menuconfig-style and lets you edit board selection, boot method, clock frequency, cache sizes, TLB entries, UART settings, and Ethernet buffer sizes. The tool updates the source files directly; there is no `.config` intermediate file. See [How to Change Configuration](config.md) for details.
+
+### cliconfig
+
+```bash
+$ make cliconfig
+```
+
+Applies configuration changes from the command line without opening the interactive menu. Pass arguments through `ARGS`, for example:
+
+```bash
+$ make cliconfig ARGS="--board arty_a7 --clk-freq 150"
+```
+
+This target uses the same `tools/setting.py` utility as `make menuconfig`. See [How to Change Configuration](config.md) for details.
+
+
 
 ## Simulation options
 
