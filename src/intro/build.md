@@ -11,7 +11,7 @@ Buildroot is included as a submodule in RVComp-buildenv and does not need to be 
 
 
 
-We have verified the following Linux kernel versions: 6.9.0, 6.12.19, 6.13.0, 6.14.2, 6.19.6.
+We have verified Linux kernel version 6.19.5.
 
 ## RVComp-buildenv
 
