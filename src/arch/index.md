@@ -8,7 +8,7 @@ RVComp is a System-on-Chip (SoC) that implements the RISC-V ISA (RV32IMAZicsr_Zi
 ```{mermaid}
 %%{init: {'flowchart': {'curve': 'stepAfter'}}}%%
 flowchart TD
-    CPU["RVCpu (RV32IMASU_Zicsr_Zicntr_Zifencei)"] --> MMU["MMU (Sv32) <br> (has ITLB/DTLB/PTW/L1 I/D Cache)"]
+    CPU["RVCpu (RV32IMA_Zicsr_Zicntr_Zifencei)"] --> MMU["MMU (Sv32) <br> (has ITLB/DTLB/PTW/L1 I/D Cache)"]
     MMU --> L2["L2 Cache <br> (Large unified cache)"]
     L2 --> AXI["AXI Based Interconnect (Address Decode)"]
     AXI --- Bus[" "]

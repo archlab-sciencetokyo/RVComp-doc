@@ -2,11 +2,17 @@
 
 ## About RVComp
 
-RVComp is a RISC-V SoC (System on Chip) with a five-stage pipeline. It supports the RV32IMASU_Zicntr_Zicsr_Zifencei instruction set, including privileged modes and the Sv32 virtual memory system, so it can run Linux. The RVComp project began in June 2024 and offers the following characteristics:
+RVComp is a RISC-V SoC (System-on-Chip) featuring a five-stage pipeline. It supports the RV32IMA_Zicntr_Zicsr_Zifencei instruction set, along with M-, S-, and U-modes, the privileged architecture, and the Sv32 virtual memory system, enabling it to run Linux. The RVComp project began in June 2024 and offers the following characteristics:
 
-- **High operating frequency**: Achieves a maximum clock frequency of **170 MHz** (Version 1.0.0.0) on a Nexys A7-100T (XC7A100T-1CSG324C)
+- **High operating frequency**: Achieves a maximum clock frequency of **170 MHz** (Version 1.0.0) on a Nexys A7-100T (XC7A100T-1CSG324C)
 - **HDL implementation**: RVComp is described in Verilog HDL with a from-scratch design except for the DRAM controller and clock generation
 - **Permissive licensing**: All HDL components except IP are provided under the MIT license
+- **Ethernet support**: 100 Mbps Ethernet controller with RMII (Nexys 4 DDR) and MII (Arty A7) interfaces, including hardware MAC filtering and FCS computation
+- **microSD boot support**: microSD controller enabling Linux to boot and operate from a microSD card on the Nexys 4 DDR board
+- **Interactive configuration**: Various SoC parameters can be configured through a terminal-based GUI (`tools/setting.py`)
+- **Docker support**: Containerized build environment with simulation tools pre-installed (Vivado must be installed natively)
+
+
 
 
 - **Ethernet support**: 100 Mbps Ethernet controller with RMII (Nexys 4 DDR) and MII (Arty A7) interfaces, including hardware MAC filtering and FCS computation
@@ -51,8 +57,6 @@ For the overall system structure, refer to [SoC Architecture](../arch/index.md).
 - **Extensions**:
   - M extension: multiplication and division instructions
   - A extension: atomic instructions (LR/SC and AMO)
-  - S extension: supervisor mode
-  - U extension: user mode
   - Zicntr: counter access instructions
   - Zicsr: CSR access instructions
   - Zifencei: instruction-fetch fences
@@ -81,7 +85,7 @@ A Docker-based build environment is also provided. Running `./tools/setup.sh` se
 
 RVComp has been validated in simulation using the following test suites:
 
-- **riscv-tests**: Covers the RISC-V ISA(RV32IMASU) (passes all tests except `ma_data`)
-- **riscv-arch-test**: Passes every test(RV32IMASU) when compared against Spike via RISCOF
+- **riscv-tests**: Covers the RISC-V ISA(rv32ui, rv32um, rv32ua, rv32mi, rv32si) (passes all tests except `ma_data`)
+- **riscv-arch-test**: Passes every test(RV32IMASUZicntr_Zicsr_Zifencei) when compared against Spike via RISCOF
 
 The `ma_data` test in riscv-tests checks misaligned accesses. Implementing hardware support for this rarely used feature would add significant complexity, so handling it with software exceptions is acceptable. RVComp intentionally raises a software exception instead, which is why the test does not pass. We also boot Linux kernel 6.13.0, run the CoreMark-PRO benchmark in validation mode, and confirm that it produces the expected results.
