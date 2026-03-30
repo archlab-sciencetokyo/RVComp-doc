@@ -9,7 +9,6 @@ The following tools are required for logic synthesis and place-and-route:
 - [device-tree-compiler](#device-tree-compiler)
 - [riscv-gnu-toolchain](#riscv-gnu-toolchain)
 - [Vivado](#vivado)
-- [Xilinx Board Files](#xilinx-board-files)
 
 The simulation flow requires:
 
@@ -19,6 +18,12 @@ The simulation flow requires:
 To use the serial communication utility we provide for the FPGA boards, install:
 
 - [uv](#uv)
+
+
+
+A Docker-based environment is available that provides all of the above tools except Vivado in a pre-configured container. See [Docker](#docker) for instructions.
+
+
 
 On Windows you also need Git and Make to work with RVComp. When running simulations through the Makefiles, remember to set the tool paths in the Makefile. After finishing the installations, continue with [the next page](./makesetup.md).
 
@@ -38,15 +43,125 @@ winget install ezwinports.make
 The RVComp source code is published on GitHub. Please clone it with:
 
 ```bash
-$ git clone https://github.com/archlab-sciencetokyo/rvcomp.git
+$ git clone https://github.com/archlab-sciencetokyo/RVComp.git
 ```
 
-If you plan to simulate programs from external repositories (CoreMark, riscv-tests, embench-iot), either clone with the appropriate options or initialize the submodules after cloning:
+
+
+The [Xilinx Board Files](https://github.com/Xilinx/XilinxBoardStore) are included as a git submodule under `tools/XilinxBoardStore`. Programs from external repositories (CoreMark, riscv-tests, embench-iot) are also submodules.
+
+
+
+Initialize all submodules after cloning:
 
 ```bash
-$ cd rvcomp
+$ cd RVComp
 $ git submodule update --init --recursive
 ```
+
+To generate a bitstream with Vivado, the [Xilinx Board Files](https://github.com/Xilinx/XilinxBoardStore) are required. If you have not initialized all submodules, you can fetch only this one with:
+
+```bash
+$ git submodule update --init tools/XilinxBoardStore
+```
+
+(docker)=
+## Docker
+
+
+
+A Docker-based build environment is provided for Linux users. It bundles riscv-gnu-toolchain, Verilator, device-tree-compiler, and other required tools in a pre-configured image. **Vivado must still be installed natively on the host**; it cannot run inside the container.
+
+### Installing Docker
+
+**Linux:**
+
+We recommend installing Docker in rootless mode so that the daemon runs as your user account without requiring `sudo`. Please follow the [official rootless installation guide](https://docs.docker.com/engine/security/rootless/) for your distribution. On Ubuntu, first install the prerequisites and configure subordinate UID/GID ranges:
+
+```bash
+$ sudo apt install -y dbus-user-session uidmap
+$ sudo echo "$USER:231072:65536" >> /etc/subuid
+$ sudo echo "$USER:231072:65536" >> /etc/subgid
+```
+
+Then run the rootless install script:
+
+```bash
+$ curl -fsSL https://get.docker.com/rootless | sh
+```
+
+Add the following lines to your `~/.bashrc` (or equivalent), replacing `<UID>` with the output of `id -u`:
+
+```bash
+export PATH=$HOME/bin:$PATH
+export DOCKER_HOST=unix:///run/user/<UID>/docker.sock
+```
+
+Enable the Docker service for your user and allow it to run after logout:
+
+```bash
+$ systemctl --user enable --now docker
+```
+
+**Windows (WSL):**
+
+Please install [Docker Desktop](https://docs.docker.com/desktop/setup/install/windows-install/) and enable the WSL 2 backend in **Settings → Resources → WSL Integration**. Docker commands are then available directly inside your WSL distribution without any additional setup.
+
+### Building the RVComp Docker image
+
+From the `RVComp/` repository root, build the image with either of the following commands:
+
+```bash
+$ docker build -t rvcomp:latest .
+```
+
+```bash
+$ ./tools/setup.sh
+```
+
+### Enabling and disabling Docker in the build
+
+The `GNUmakefile` in the RVComp repository root contains a `DOCKER` variable that controls whether commands are delegated to the container:
+
+- Set `DOCKER=1` (the default) to delegate Docker-compatible targets to the container.
+- Set `DOCKER=0` to run commands directly on the host.
+
+You can either edit `GNUmakefile` directly or override it on the command line:
+
+```bash
+$ make DOCKER=1 isa
+$ make DOCKER=1 menuconfig
+$ make DOCKER=0 bit
+```
+
+When `DOCKER=1`, `make` starts the container automatically before executing Docker-compatible targets. The following targets remain on the host even when Docker is enabled, because they require Vivado or direct access to local devices: `bit`, `rebit`, `reclockbit`, `load`, `remoteload`, `termnb`, `term`, and `config`.
+
+`menuconfig` and `cliconfig` are delegated to the container with an interactive TTY when Docker is enabled. This lets you use the configuration UI without installing the Python dependencies on the host.
+
+### Using the container interactively
+
+To open a shell inside the container with the repository mounted, run the following from the `RVComp/` root:
+
+```bash
+$ docker run -it --rm -v $(pwd):/workspace rvcomp:latest bash
+```
+
+
+
+(vivado)=
+## Vivado
+
+As of October 2025, RVComp supports the AMD-based FPGA boards Nexys 4 DDR 100T and Arty A7 35T. Please install [Vivado Edition](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2024-1.html) for your OS to generate and load the FPGA bitstreams. We have validated version 2024.1.0 only.
+
+If you use the bitstreams we provide and do not run place-and-route yourself, Vivado Lab Solutions is sufficient.
+
+Vivado is supported only on x86_64 Linux or Windows. Use a virtual machine if you are on an Arm system.
+
+
+
+Vivado is **not** available inside the Docker container. It must be installed natively on the host regardless of whether Docker is used for other tools.
+
+
 
 (riscv-gnu-toolchain)=
 ## riscv-gnu-toolchain
@@ -87,15 +202,6 @@ $ make linux -j$(nproc)
 
 If the installation fails, please try `make clean` and rerun the build commands, or rebuild in a minimal environment. After installation, please add the `bin` directory under the installation prefix to your `PATH`.
 
-(vivado)=
-## Vivado
-
-As of October 2025, RVComp supports the AMD-based FPGA boards Nexys 4 DDR 100T and Arty A7 35T. Please install [Vivado Edition](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2024-1.html) for your OS to generate and load the FPGA bitstreams. We have validated version 2024.1.0 only.
-
-If you use the bitstreams we provide and do not run place-and-route yourself, Vivado Lab Solutions is sufficient.
-
-Vivado is supported only on x86_64 Linux or Windows. Use a virtual machine if you are on an Arm system.
-
 (uv)=
 ## uv
 
@@ -109,15 +215,6 @@ $ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```powershell
 # On Windows
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-(xilinx-board-files)=
-## Xilinx Board Files
-
-If you use Vivado through the GUI you do not need this step. Otherwise, please install the board definition files for Nexys 4 DDR and Arty A7 from the [Xilinx Board Store](https://github.com/Xilinx/XilinxBoardStore):
-
-```bash
-$ git clone https://github.com/Xilinx/XilinxBoardStore
 ```
 
 (device-tree-compiler)=
@@ -190,8 +287,10 @@ $ git clone https://github.com/archlab-sciencetokyo/opensbi.git
 
 ## Buildroot (Optional)
 
-We use [Buildroot](https://buildroot.org/) to build Linux images. Buildroot bundles the Linux kernel, C library, shell, and basic userland tools into a single build. We use version 2025.02; other versions are untested. Please download it from the [official site](https://buildroot.org/download.html) and extract the archive.
+We use [Buildroot](https://buildroot.org/) to build Linux images. Buildroot bundles the Linux kernel, C library, shell, and basic userland tools into a single build. Please download it from the [official site](https://buildroot.org/download.html) and extract the archive.
 
-## Linux Kernel (Optional)
 
-Download recent Linux kernels from [kernel.org](https://www.kernel.org/) if you want to try newer versions. We have verified only 6.9.0, 6.12.19, 6.13.0, and 6.14.2.
+
+The recommended way to build Linux for RVComp is through the [RVComp-buildenv](https://github.com/archlab-sciencetokyo/RVComp-buildenv) repository, which provides a pre-configured Buildroot external tree. See [Linux Build](build.md) for details.
+
+

@@ -15,12 +15,10 @@ Please configure these variables to use the serial communication program through
 
 Please set the following variables to run logic synthesis, place-and-route, and bitstream generation via Make:
 
+- `RISCV_PATH`
+  Installation path of the riscv-gnu-toolchain GCC (up to `bin/`). If `riscv32-unknown-elf-gcc` is already in `PATH`, you can leave this unset. When using the Docker environment, this variable is not required.
 - `vivado`  
   Path to the Vivado executable. You can omit this if Vivado is already in `PATH`. Use an absolute path otherwise.
-- `board_data_path`  
-  Absolute path to the Xilinx Board Files.
-- `RISCV_PATH`  
-  Installation path of the riscv-gnu-toolchain GCC (up to `bin/`). Include the trailing slash. If `riscv32-unknown-elf-gcc` is already in `PATH`, you can leave this unset.
 - `serial_number` (for `remoteload` only)  
   Serial number of the FPGA board when loading through the Vivado hardware server.
 - `ip_address` (for `remoteload` only)  
@@ -28,7 +26,7 @@ Please set the following variables to run logic synthesis, place-and-route, and 
 
 Please update these variables whenever you change the Linux image or boot payload:
 
-- `BIN_SIZE`  
-  Size of the Linux image in bytes (`Size` reported by `stat <file>`). Keep it in sync with the payload you send.
+- `BIN_SIZE`
+  For MMC boot, set this to the size of the payload region excluding the root filesystem. The current layout places the root filesystem at a 32 MiB offset, so set `BIN_SIZE` to 32 MiB (33554432). By default it is set to the size of `image/fw_payload.bin`.
 - `linux_image`  
   Absolute path to the Linux image transferred over the serial link after loading the bitstream.

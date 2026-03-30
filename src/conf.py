@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'RVComp Guide'
-copyright = '2025, Yuki Yagi'
+copyright = '2025–2026, Yuki Yagi'
 author = 'Yuki Yagi'
 
 # -- General configuration ---------------------------------------------------
@@ -39,7 +39,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_baseurl = 'https://archlab-sciencetokyo.github.io/RVComp-doc/'
 html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
+html_static_path = ['../_static']
 html_title = "top"
 
 root_doc = 'index'

@@ -2,70 +2,104 @@
 
 ## Overview
 
-bootrom is a ROM that stores the first-stage bootloader and device tree executed first after startup. It uses BRAM. Here, mainly the software part is explained. The hardware part implements just a ROM and an interconnect slave.
+bootrom is a ROM that stores the first-stage bootloader and device tree executed first after startup. It uses BRAM. This page focuses mainly on the software side; the hardware side is a ROM plus an interconnect slave.
+
+The bootloader supports two build-time modes:
+
+- **UART boot**
+- **MMC (microSD card) boot**
+
+The mode is selected when the bootrom is built. In practice, `tools/setting.py` comments or uncomments `#define UART_BOOT` in `bootrom/src/bootloader.c` so that the generated bitstream matches the selected boot method.
 
 ## Module Hierarchy
 
 Hardware
-```
+
+```text
 bootrom (bootrom/bootrom.v)                # ROM for boot (no submodules)
 ```
 
-
 Software
-```
+
+```text
 src/
 ├── bootrom.S                              # Startup routine
 ├── bootloader.c                           # First-stage bootloader
-├── rvcom_uart.c                           # UART driver implementation
-├── rvcom_uart.h                           # UART driver header
+├── rvcomp_uart.c                          # UART driver implementation
+├── rvcomp_uart.h                          # UART driver header
+├── rvcomp_mmc.c                           # sdcram CSR access helpers
+├── rvcomp_mmc.h                           # sdcram CSR definitions
+├── rvcomp_ether.c                         # Bare-metal Ethernet helper
+├── rvcomp_ether.h                         # Bare-metal Ethernet definitions
 ├── io.h                                   # I/O macros
 └── linker.ld                              # Linker script
 ```
 
 Device Tree
-```
-rvcom.dts (rvcom.dtb)                      # Device tree
+
+```text
+rvcomp.dts (rvcomp.dtb)                    # Device tree
 ```
 
 ### Key Features
 
-- **Size**: 8KiB
+- **Size**: 8 KiB
 - **Memory Type**: ROM
-- **Address Range**: 0x00010000 - 0x00012000
-- **First-stage Bootloader**: Load kernel from UART to DRAM
+- **Address Range**: 0x00010000 - 0x00011fff
+- **First-stage Bootloader**: Loads `fw_payload.bin` into DRAM either from UART or from the microSD card.
 
-### Module Description
+## Module Description
 
-#### bootrom (bootrom/bootrom.v)
-bootrom is read-only memory using BRAM. It has 8KB capacity and stores the first-stage bootloader and device tree. After reset, the CPU's program counter (PC) is set to 0x00010000, and instruction fetching begins from here.
-bootrom stores in 128-bit units and is read with 128-bit data width. An interconnect slave is implemented.
+### bootrom (bootrom/bootrom.v)
 
+bootrom is read-only memory using BRAM. It has 8 KiB capacity and stores the first-stage bootloader and device tree. After reset, the CPU's program counter (PC) is set to `0x00010000`, and instruction fetching begins from here.
+
+The ROM stores data in 128-bit units and is read with 128-bit width through the interconnect.
 
 ## Software Configuration
 
-Bootrom software is stored in the `rvcom/bootrom/src/` directory:
+Bootrom software is stored in `RVComp/bootrom/src/`.
 
 ### bootrom.S
-Executes startup routine and calls the first-stage bootloader.
-Then starts OpenSBI, the second-stage bootloader, passing the device tree and hartid to identify the CPU as arguments.
+
+Executes the startup routine and calls the first-stage bootloader. After the payload has been copied into DRAM, control continues to OpenSBI.
+
 ### bootloader.c
 
-First-stage bootloader program that loads program image from UART to DRAM.
-Displays "[     bootrom] Hello, world!\n" and receives `BIN_SIZE` bytes of data specified in Makefile from UART and writes to DRAM.
+`bootloader.c` copies `BIN_SIZE` bytes to DRAM at `0x80000000`.
 
+**UART boot mode**:
 
-### rvcom_uart.c / rvcom_uart.h
+- Prints `[     bootrom] Hello, world!\n`
+- Receives `BIN_SIZE` bytes over UART
+- Writes the received bytes to DRAM
 
-UART control driver.
-Use these functions to perform UART read/write operations.
+This is the mode used by `uv run term --linux-boot`, which starts sending `fw_payload.bin` after it detects the bootrom banner.
+
+**MMC boot mode**:
+
+- Copies `BIN_SIZE` bytes from the beginning of the microSD card into DRAM
+
+Before booting, write the payload and root filesystem to the microSD card and insert it into the Nexys 4 DDR.
+
+### rvcomp_uart.c / rvcomp_uart.h
+
+Baremetal UART driver.
+
+### rvcomp_mmc.c / rvcomp_mmc.h
+
+Baremetal sdcram driver.
+
+### rvcomp_ether.c / rvcomp_ether.h
+
+Baremetal ethernet control drivers.
 
 ### io.h
 
-Inline assembly macros for hardware I/O.
-CPU accesses via MMIO, so uses lw/sw.
+Inline assembly macros for hardware I/O. CPU access is via MMIO, so the macros use load/store instructions.
 
 ### linker.ld
 
-Linker script for bootrom.
-Describes address placement for MMIO access, etc.
+Linker script for the bootrom. It describes code placement and MMIO-related address layout.
+
+
