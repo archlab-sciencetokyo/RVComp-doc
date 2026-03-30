@@ -11,8 +11,7 @@ Please download the following files from [the release page](https://github.com/a
 - `uart_nexys4ddr.bit`: Bitstream for Nexys 4 DDR (UART boot)
 
 **MMC boot (Nexys 4 DDR only):**
-- `fw_payload.bin`: Linux image for MMC boot
-- `rootfs.ext4`: Root filesystem image for MMC boot
+- `mmc_fw_payload.bin`: Linux image for MMC boot
 - `mmc_nexys4ddr.bit`: Bitstream for Nexys 4 DDR (MMC boot)
 
 ```{note}
@@ -135,3 +134,6 @@ $ udevadm info /dev/ttyUSB1 | grep ID_VENDOR=
 
 Please record the `/dev/ttyUSB*` path assigned to the FPGA board.
 
+
+## Prebuilt Bitstream Parameters
+The prebuilt bitstreams provided in the release are configured with the default settings in `tools/setting.py`.
