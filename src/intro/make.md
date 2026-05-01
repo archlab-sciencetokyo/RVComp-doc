@@ -115,16 +115,20 @@ Please pass the following variables to adjust simulation and debugging behavior:
 - `TRACE_RF_FILE=<file>`: Dump register-file traces
 - `TRACE_DMEM_FILE=<file>`: Dump data-memory traces
 - `NO_UART_BOOT=1`: Disable UART boot and start with DRAM preloaded
-- `DIFF_SPIKE=1`: Compare instruction results with Spike and save the diff to `log/diff`
+- `DIFF_SPIKE_TRACE=1`: Compare instruction results with Spike and save the diff to `log/diff`
 
 ## RISC-V ISA tests
 
 Runs [riscv-tests](https://github.com/riscv-software-src/riscv-tests), located under `prog/riscv-tests`.
+When you set `SPIKE_DIFF_TRACE=1`, the tests compare simulation results with the Spike reference implementation. Differences are saved to `log/diff`.
+`pytest` runs and compares RVComp simulation traces with Spike traces to determine pass/fail. The results are printed in the terminal.
+Set `PYTEST_JOBS=<number>` to control the number of parallel `pytest` jobs. For example, `PYTEST_JOBS=4` runs four tests at once. The default is 1, so all tests run sequentially.
 
 ### isa
 
 ```bash
 $ make isa
+$ make isa DIFF_SPIKE_TRACE=1 PYTEST_JOBS=4 // Runs all RISC-V ISA tests and compares results with Spike using 4 parallel jobs
 ```
 
 Runs every RISC-V ISA test. Depending on configuration, this includes:

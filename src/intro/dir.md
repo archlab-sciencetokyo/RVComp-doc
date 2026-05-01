@@ -284,6 +284,7 @@ tools/
 ├── setting.py            # menuconfig-style configuration utility (make menuconfig / make cliconfig)
 ├── setup.sh              # Docker image build helper
 ├── term.py               # Serial communication program (make term / make termnb)
+├── tests.py              # Compare simulation results with Spike reference
 └── uv.lock               # uv dependency lock file
 ```
 
