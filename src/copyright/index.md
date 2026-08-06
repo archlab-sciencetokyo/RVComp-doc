@@ -3,8 +3,8 @@
 ## Project Information
 This project started June, 2024.
 **Project Name**: RVComp\
-**Version**: 1.1.0\
-**Last Updated**: 2026/03/27
+**Version**: 1.1.2\
+**Last Updated**: 2026/08/06
 
 ## Copyright
 
@@ -26,4 +26,4 @@ We would like to appreciate the contributions from [shmknrk](https://github.com/
 - **2025-10-31**: v1.0.0 - Initial release
 - **2026-03-30**: v1.1.0 - Added Ethernet MAC Controller (RMII/MII), microSD root filesystem support, and various usability improvements. 
 - **2026-05-01**: v1.1.1 - Added Test Script for Spike Comparison and Updated Documentation
-
+- **2026-08-06**: v1.1.2 - Fixed bugs and added scripts for finding the serial ports.

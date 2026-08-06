@@ -90,6 +90,9 @@ When using `make termnb` on Arty A7, if `[bootrom] Hello, world!` is displayed i
 (communication-port-check)=
 ## Communication Port Check
 
+You can check the serial port by running the following command in the `tools` directory:
+`uv run findport` (need to have `uv` installed). If this command does not work, please follow the instructions below for your operating system.
+
 Use these steps to identify the serial port assigned to the FPGA. The simplest approach is to compare the device list before and after unplugging the FPGA.
 
 ### Windows
