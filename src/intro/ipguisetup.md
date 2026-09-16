@@ -77,7 +77,7 @@ MIG (Memory Interface Generator) is an IP core provided by AMD for controlling D
 
 ## Clocking Wizard
 
-### clk_wiz_1 (for DRAM Controller)
+### clk_wiz_0 (for DRAM Controller)
 1. Search for "Clocking Wizard" from "IP Catalog" and double-click to add the IP.
 2. The "Customize IP" window opens. Configure the following settings.
 3. Click "Clocking Options".
@@ -88,7 +88,7 @@ MIG (Memory Interface Generator) is an IP core provided by AMD for controlling D
     - Request of clk_out1's Output Freq (MHz): 166.6666 
     - Request of clk_out1's Output Freq (MHz): 200.0000
 
-### clk_wiz_2 (for SoC)
+### clk_wiz_1 (for SoC)
 1. Search for "Clocking Wizard" from "IP Catalog" and double-click to add the IP.
 2. The "Customize IP" window opens. Configure the following settings.
 3. Click "Clocking Options".
